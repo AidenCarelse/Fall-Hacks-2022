@@ -2,20 +2,13 @@ package com.fallhacks2022.c1;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainApplication {
-    private JButton ButtonTest;
     private JPanel PanelMain;
+    private JLabel TimerLabel;
 
     public MainApplication() {
-        ButtonTest.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Hello World");
-            }
-        });
+
     }
 
     public static void main(String[] args) {
@@ -25,5 +18,10 @@ public class MainApplication {
         frame.setPreferredSize(new Dimension(700, 700));
         frame.pack();
         frame.setVisible(true);
+    }
+
+    public void UpdateTimer(String time)
+    {
+        TimerLabel.setText(time);
     }
 }
