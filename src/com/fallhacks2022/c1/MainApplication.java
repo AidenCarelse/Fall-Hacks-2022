@@ -6,11 +6,13 @@ import java.awt.*;
 public class MainApplication {
     public JPanel PanelMain;
 
+    public static TimerApplication app;
+
     public MainApplication() { }
 
     public static void main(String[] args)
     {
-        TimerApplication app = new TimerApplication();
+        app = new TimerApplication();
         app.StartTimerApplication();
 
         JFrame frame = new JFrame("Timer App");
