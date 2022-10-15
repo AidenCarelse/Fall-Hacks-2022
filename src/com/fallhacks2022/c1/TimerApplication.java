@@ -286,5 +286,17 @@ public class TimerApplication {
     {
         TimerLabel.setText(time);
     }
+
+    public void UpdateSessionText(boolean working)
+    {
+        if(working)
+        {
+            session.setText("Working Time!");
+        }
+        else
+        {
+            session.setText("Break Time!");
+        }
+    }
 }
 
