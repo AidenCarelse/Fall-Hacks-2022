@@ -18,7 +18,7 @@ public class MainApplication {
         JFrame frame = new JFrame("Timer App");
         frame.setContentPane(app.PanelMain);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(700, 700));
+        frame.setPreferredSize(new Dimension(900, 600));
 
         frame.pack();
         frame.setVisible(true);
