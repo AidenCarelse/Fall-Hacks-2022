@@ -6,8 +6,8 @@ import java.util.Timer;
 
 public class TimerObject {
 
-    int workMins, breakMins, longBreakMins, breakItervals;
-    int currMins, currSeconds;
+    int workMins, breakMins, longBreakMins, breakIntervals;
+    int currMins, currSeconds, breakSeconds, restMins, restSeconds;
     Timer t;
 
 
@@ -24,10 +24,14 @@ public class TimerObject {
         {
             this.workMins = workMins;
             this.breakMins = breakMins;
-            this.breakItervals = breakIntervals;
+            this.breakIntervals = breakIntervals;
             this.longBreakMins = longBreakMins;
             currSeconds = 0;
             currMins = workMins;
+            breakSeconds=0;
+            restMins = breakMins;
+
+
         }
 
         t = new Timer();
@@ -53,7 +57,7 @@ public class TimerObject {
 
                 if(currMins == 0 && currSeconds == 0)
                 {
-                    start(breakMins, workMins, longBreakMins, breakIntervals, false);
+                   currMins = breakMins;
                 }
             }
             public void breaks(){
