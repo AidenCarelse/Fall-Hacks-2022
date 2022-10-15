@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
@@ -16,6 +18,12 @@ public class TimerApplication {
     private JButton PauseButton;
     private JLabel WorkTime;
     private JLabel BreakTime;
+    private java.util.List<String> tasks;
+    private JPanel todoPanel;
+    private JTabbedPane tabbedPane;
+    private JLabel empty;
+    private JTextField field;
+    private TimerObject timer;
 
     public void StartTimerApplication()
     {
@@ -66,7 +74,7 @@ public class TimerApplication {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                TimerObject timer = new TimerObject();
+                timer = new TimerObject();
                 timer.start(25, 5, 25, 4);
             }
         });
@@ -75,7 +83,7 @@ public class TimerApplication {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // Pause/stop timer
+                timer.pause();
             }
         });
     }
@@ -96,7 +104,7 @@ public class TimerApplication {
 
     private void InitializeTabs()
     {
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         PanelMain.add(tabbedPane);
 
         tabbedPane.setBounds(550, 0, 300, 500);
@@ -110,21 +118,17 @@ public class TimerApplication {
 
     private JPanel InitializeToDoList()
     {
-        JPanel todo = new JPanel(null);
+        todoPanel = new JPanel(null);
 
-        todo.setBackground(Color.white);
+        todoPanel.setBackground(Color.white);
 
-        //JCheckBox test = new JCheckBox();
-        //test.setBounds(10, 10, 100, 20);
-        //todo.add(test);
-
-        JLabel empty = new JLabel("<html>You don't have any tasks, click + to create<br/>one!</html>");
+        empty = new JLabel("<html>You don't have any tasks, click + to create<br/>one!</html>");
         empty.setFont(new Font("SansSerif", Font.ITALIC, 14));
         empty.setForeground(Color.gray);
         empty.setBounds(10, 10, 290, 40);
-        todo.add(empty);
+        todoPanel.add(empty);
 
-        return todo;
+        return todoPanel;
     }
 
     private JPanel InitializeCompletedList()
@@ -140,26 +144,81 @@ public class TimerApplication {
         addPanel.setBackground(Color.white);
         addPanel.setBorder(null);
 
-        JTextField test = new JTextField ();
-        test.setBounds(10, 10, 250, 25);
-        test.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        field = new JTextField ();
+        field.setBounds(10, 10, 250, 25);
+        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
         JButton add = new JButton();
-        add.setBounds(10, test.getY() + test.getHeight() + 5, 100, 20);
+        add.setBounds(10, field.getY() + field.getHeight() + 5, 100, 20);
         add.setFont(new Font("SansSerif", Font.BOLD, 14));
         add.setText("Add Task");
         add.setBorder(null);
         add.setForeground(Color.white);
         add.setBackground(new Color(237, 92, 78));
 
-        addPanel.add(test);
+        add.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                AddToToDoList(field.getText());
+            }
+        });
+
+        tasks = new ArrayList<String>();
+
+        addPanel.add(field);
         addPanel.add(add);
         return addPanel;
     }
 
-    private void AddToDoList(String task)
+    private void AddToToDoList(String task)
     {
+        tasks.add(task);
+        int y = 10;
 
+        if(tasks.size() == 1)
+        {
+            todoPanel.remove(empty);
+        }
+        else
+        {
+            Component last = todoPanel.getComponents()[todoPanel.getComponents().length - 1];
+            y = last.getY() + last.getHeight();
+        }
+
+        JCheckBox check = new JCheckBox();
+        check.setBounds(10, y, 20, 30);
+        check.setBackground(Color.white);
+
+        JLabel label = new JLabel(task);
+        label.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        label.setForeground(Color.gray);
+        label.setBounds(35, y, 290, 30);
+
+        check.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                RemoveFromToDoList(check, label);
+            }
+        });
+
+
+        todoPanel.add(label);
+        todoPanel.add(check);
+        tabbedPane.setSelectedComponent(todoPanel);
+        field.setText("");
+    }
+
+    private void RemoveFromToDoList(JCheckBox checkBox, JLabel label)
+    {
+        todoPanel.remove(checkBox);
+        todoPanel.remove(label);
+
+        todoPanel.revalidate();
+        todoPanel.repaint();
     }
 
     public void UpdateTimer(String time)
