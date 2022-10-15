@@ -23,12 +23,15 @@ public class TimerApplication {
     private JLabel WorkTime;
     private JLabel BreakTime;
     private java.util.List<String> tasks;
+    private java.util.List<String> completed;
     private JPanel todoPanel;
     private JTabbedPane tabbedPane;
-    private JLabel empty;
+    private JLabel emptyTasks;
+    private JLabel emptyCompleted;
     private JTextField field;
     private TimerObject timer = null;
     public JLabel session;
+    private JPanel completedPanel;
 
     public void StartTimerApplication()
     {
@@ -174,21 +177,29 @@ public class TimerApplication {
 
         todoPanel.setBackground(Color.white);
 
-        empty = new JLabel("<html>You don't have any tasks, click + to create<br/>one!</html>");
-        empty.setFont(new Font("SansSerif", Font.ITALIC, 14));
-        empty.setForeground(Color.gray);
-        empty.setBounds(10, 10, 290, 40);
-        todoPanel.add(empty);
+        emptyTasks = new JLabel("<html>You don't have any tasks, click + to create<br/>one!</html>");
+        emptyTasks.setFont(new Font("SansSerif", Font.ITALIC, 14));
+        emptyTasks.setForeground(Color.gray);
+        emptyTasks.setBounds(10, 10, 290, 40);
+        todoPanel.add(emptyTasks);
 
         return todoPanel;
     }
 
     private JPanel InitializeCompletedList()
     {
-        JPanel completed = new JPanel(null);
-        completed.setBackground(Color.white);
+        completedPanel = new JPanel(null);
+        completedPanel.setBackground(Color.white);
 
-        return completed;
+        emptyCompleted = new JLabel("<html>You haven't completed any tasks yet!</html>");
+        emptyCompleted .setFont(new Font("SansSerif", Font.ITALIC, 14));
+        emptyCompleted .setForeground(Color.gray);
+        emptyCompleted .setBounds(10, 10, 290, 21);
+        completedPanel.add(emptyCompleted );
+
+        completed = new ArrayList<>();
+
+        return completedPanel;
     }
 
     private JPanel InitializeAddList()
@@ -232,7 +243,7 @@ public class TimerApplication {
 
         if(tasks.size() == 1)
         {
-            todoPanel.remove(empty);
+            todoPanel.remove(emptyTasks);
         }
         else
         {
@@ -278,8 +289,37 @@ public class TimerApplication {
         todoPanel.remove(checkBox);
         todoPanel.remove(label);
 
+        tasks.remove(label.getText());
+        completed.add(label.getText());
+
+        if(tasks.isEmpty())
+        {
+            todoPanel.add(emptyTasks);
+        }
+
+        int y = 10;
+
+        if(completed.size() == 1)
+        {
+            completedPanel.remove(emptyCompleted);
+        }
+        else
+        {
+            Component last = completedPanel.getComponents()[completedPanel.getComponents().length - 1];
+            y = last.getY() + last.getHeight();
+        }
+
+        label.setFont(new Font("SansSerif", Font.ITALIC, 14));
+        label.setText("<html><strike>"+label.getText()+"</strike><html>");
+        label.setBounds(10, y, 290, 30);
+
+        completedPanel.add(label);
+
         todoPanel.revalidate();
         todoPanel.repaint();
+        completedPanel.revalidate();
+        completedPanel.repaint();
+
     }
 
     public void UpdateTimer(String time)
