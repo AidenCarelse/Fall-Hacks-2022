@@ -20,11 +20,22 @@ public class TimerObject {
 
             currSeconds--;
 
-
-            MainApplication.app.UpdateTimer(currMins + " : " + currSeconds);
+            if(currSeconds < 10) {
+                MainApplication.app.UpdateTimer(currMins + " : 0" + currSeconds);
+            }
+            else
+            {
+                MainApplication.app.UpdateTimer(currMins + " : " + currSeconds);
+            }
         }
 
     };
+
+    public void pause(){
+        t.cancel();
+
+
+    }
 
     public void start(int workMins, int breakMins, int longBreakMins, int breakIntervals)
     {
@@ -32,7 +43,7 @@ public class TimerObject {
         this.breakMins = breakMins;
         this.breakItervals = breakIntervals;
         this.longBreakMins = longBreakMins;
-        currSeconds = 0;
+        currSeconds = 15;
         currMins = workMins;
         t.scheduleAtFixedRate(task,1000,1000);
     }
