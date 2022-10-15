@@ -23,7 +23,7 @@ public class TimerApplication {
     private JTabbedPane tabbedPane;
     private JLabel empty;
     private JTextField field;
-    private TimerObject timer;
+    private TimerObject timer = null;
 
     public void StartTimerApplication()
     {
@@ -74,8 +74,15 @@ public class TimerApplication {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                timer = new TimerObject();
-                timer.start(25, 5, 25, 4);
+                boolean resume = true;
+
+                if(timer == null)
+                {
+                    timer = new TimerObject();
+                    resume = false;
+                }
+
+                timer.start(25, 5, 25, 4, resume);
             }
         });
         PauseButton.addActionListener(new ActionListener()
