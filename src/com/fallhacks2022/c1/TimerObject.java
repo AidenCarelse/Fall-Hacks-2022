@@ -6,23 +6,34 @@ import java.util.Timer;
 
 public class TimerObject {
 
-    public static void main(String[] args)
-    {
-        TimerObject obj = new TimerObject();
-        obj.start();
-    }
+    int workMins, breakMins, longBreakMins, breakItervals;
+    int currMins, currSeconds;
 
-    int i = 100;
     Timer t = new Timer();
     TimerTask task = new TimerTask() {
         public void run() {
-            i++;
-            MainApplication.app.UpdateTimer(String.valueOf(i));
+            if(currSeconds == 0)
+            {
+                currMins--;
+                currSeconds = 60;
+            }
+
+            currSeconds--;
+
+
+            MainApplication.app.UpdateTimer(currMins + " : " + currSeconds);
         }
 
     };
 
-    public void start(){
+    public void start(int workMins, int breakMins, int longBreakMins, int breakIntervals)
+    {
+        this.workMins = workMins;
+        this.breakMins = breakMins;
+        this.breakItervals = breakIntervals;
+        this.longBreakMins = longBreakMins;
+        currSeconds = 0;
+        currMins = workMins;
         t.scheduleAtFixedRate(task,1000,1000);
     }
 }

@@ -67,7 +67,7 @@ public class TimerApplication {
             public void actionPerformed(ActionEvent e)
             {
                 TimerObject timer = new TimerObject();
-                timer.start();
+                timer.start(25, 5, 25, 4);
             }
         });
         PauseButton.addActionListener(new ActionListener()
