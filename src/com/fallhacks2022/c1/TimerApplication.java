@@ -1,9 +1,13 @@
 package com.fallhacks2022.c1;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -29,11 +33,27 @@ public class TimerApplication {
     {
         PanelMain.setLayout(null);
 
+        //SetWaves();
         InitializeLabel();
         InitializeButtons();
         InitializeTimes();
         InitializeTabs();
     }
+
+    /*private void SetWaves() throws IOException
+    {
+        try
+        {
+            BufferedImage bottomWaves = ImageIO.read(new File("svg_wave_bottom.png"));
+            JLabel picture = new JLabel(new ImageIcon(bottomWaves));
+            PanelMain.add(picture);
+        }
+        catch (IOException ex)
+        {
+
+        }
+
+    }*/
 
     private void InitializeLabel()
     {
@@ -82,7 +102,7 @@ public class TimerApplication {
                     resume = false;
                 }
 
-                timer.start(25, 5, 25, 4, resume);
+                timer.start(1, 2, 25, 4, resume);
             }
         });
         PauseButton.addActionListener(new ActionListener()
