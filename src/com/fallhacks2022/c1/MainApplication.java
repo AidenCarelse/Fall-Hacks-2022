@@ -20,6 +20,7 @@ public class MainApplication {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(900, 600));
 
+        frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
     }

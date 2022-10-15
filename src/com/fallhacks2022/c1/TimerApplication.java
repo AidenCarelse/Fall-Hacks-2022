@@ -28,39 +28,57 @@ public class TimerApplication {
     private JLabel empty;
     private JTextField field;
     private TimerObject timer = null;
+    public JLabel session;
 
     public void StartTimerApplication()
     {
         PanelMain.setLayout(null);
 
-        //SetWaves();
+        try
+        {
+            SetWaves();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        SetTitle();
         InitializeLabel();
         InitializeButtons();
         InitializeTimes();
         InitializeTabs();
     }
 
-    /*private void SetWaves() throws IOException
+    private void SetWaves() throws IOException
     {
-        try
-        {
-            BufferedImage bottomWaves = ImageIO.read(new File("svg_wave_bottom.png"));
-            JLabel picture = new JLabel(new ImageIcon(bottomWaves));
-            PanelMain.add(picture);
-        }
-        catch (IOException ex)
-        {
+        Image bottomWaves = ImageIO.read(new File("svg_wave_bottom.png")).getScaledInstance(900, 125, Image.SCALE_DEFAULT);
+        JLabel picture = new JLabel(new ImageIcon(bottomWaves));
+        picture.setBounds(0, 450, 900, 125);
+        PanelMain.add(picture);
+    }
 
-        }
+    private void SetTitle()
+    {
+        JLabel title = new JLabel("The Pomodoro Technique", SwingConstants.LEFT);
+        PanelMain.add(title);
 
-    }*/
+        title.setBounds(25, 25, 500, 30);
+        title.setFont(new Font("SansSerif", Font.BOLD, 32));
+
+        JLabel subtitle = new JLabel("Study Clock & Check List");
+        PanelMain.add(subtitle);
+        subtitle.setBounds(25, title.getY() + title.getHeight() + 10, 500, 30);
+        subtitle.setFont(new Font("SansSerif", Font.BOLD, 20));
+        subtitle.setForeground(Color.gray);
+    }
 
     private void InitializeLabel()
     {
         TimerLabel = new JLabel("25 : 00", SwingConstants.CENTER);
         PanelMain.add(TimerLabel);
 
-        TimerLabel.setBounds(75, 125,400, 100);
+        TimerLabel.setBounds(75, 175,400, 100);
         TimerLabel.setFont(new Font("SansSerif", Font.BOLD, 100));
     }
 
@@ -117,6 +135,13 @@ public class TimerApplication {
 
     private void InitializeTimes()
     {
+        session = new JLabel("Working Time!", SwingConstants.CENTER);
+        PanelMain.add(session);
+
+        session.setBounds(TimerLabel.getX(), TimerLabel.getY() - 30, TimerLabel.getWidth(), 30);
+        session.setFont(new Font("SansSerif", Font.BOLD, 18));
+        session.setForeground(Color.gray);
+
         WorkTime = new JLabel("Total Time Worked 00:00", SwingConstants.CENTER);
         BreakTime = new JLabel("Total Break Time 00:00", SwingConstants.CENTER);
         PanelMain.add(WorkTime);
@@ -134,7 +159,7 @@ public class TimerApplication {
         tabbedPane = new JTabbedPane();
         PanelMain.add(tabbedPane);
 
-        tabbedPane.setBounds(550, 0, 300, 500);
+        tabbedPane.setBounds(550, 0, 300, 475);
         tabbedPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tabbedPane.setBorder(null);
 
@@ -161,6 +186,7 @@ public class TimerApplication {
     private JPanel InitializeCompletedList()
     {
         JPanel completed = new JPanel(null);
+        completed.setBackground(Color.white);
 
         return completed;
     }
@@ -217,6 +243,7 @@ public class TimerApplication {
         JCheckBox check = new JCheckBox();
         check.setBounds(10, y, 20, 30);
         check.setBackground(Color.white);
+        check.setForeground(Color.white);
 
         JLabel label = new JLabel(task);
         label.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -228,7 +255,14 @@ public class TimerApplication {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                RemoveFromToDoList(check, label);
+                try
+                {
+                    RemoveFromToDoList(check, label);
+                }
+                catch (InterruptedException ex)
+                {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -239,7 +273,7 @@ public class TimerApplication {
         field.setText("");
     }
 
-    private void RemoveFromToDoList(JCheckBox checkBox, JLabel label)
+    private void RemoveFromToDoList(JCheckBox checkBox, JLabel label) throws InterruptedException
     {
         todoPanel.remove(checkBox);
         todoPanel.remove(label);
