@@ -66,7 +66,8 @@ public class TimerApplication {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // Start timer
+                TimerObject timer = new TimerObject();
+                timer.start();
             }
         });
         PauseButton.addActionListener(new ActionListener()
