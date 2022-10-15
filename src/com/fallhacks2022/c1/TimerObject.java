@@ -50,6 +50,18 @@ public class TimerObject {
                 {
                     MainApplication.app.UpdateTimer(currMins + " : " + currSeconds);
                 }
+
+                if(currMins == 0 && currSeconds == 0)
+                {
+                    start(breakMins, workMins, longBreakMins, breakIntervals, false);
+                }
+            }
+            public void breaks(){
+                if(currMins == 0 && currSeconds==0){
+
+
+                }
+
             }
 
         };
