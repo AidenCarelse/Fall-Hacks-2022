@@ -156,6 +156,11 @@ public class TimerApplication {
         return addPanel;
     }
 
+    private void AddToDoList(String task)
+    {
+
+    }
+
     public void UpdateTimer(String time)
     {
         TimerLabel.setText(time);
