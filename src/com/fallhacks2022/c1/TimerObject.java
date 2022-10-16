@@ -10,11 +10,15 @@ public class TimerObject {
     int currMins, currSeconds, breakSeconds, restMins;
     Timer t;
     boolean working = true;
+    // These are the variables for the timer methods
 
     public void pause()
     {
         t.cancel();
     }
+
+    //This is the pause method and it simply pauses the timer
+
 
     public void start(int workMins, int breakMins, int longBreakMins, int breakIntervals, boolean resume)
     {
@@ -31,10 +35,17 @@ public class TimerObject {
             currInterval = 1;
         }
 
+        //Variables are initialized
+
         t = new Timer();
+
+
+        //The Timertask Object is used for scheduling one-time or repeated execution by a Timer
 
         TimerTask task = new TimerTask()
         {
+            //The run method is responsible for running the time in the timer
+            //There are various if statements that determine how the time will be displayed on the app
             public void run() {
                 if(currSeconds == 0)
                 {
