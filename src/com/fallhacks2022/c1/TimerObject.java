@@ -6,10 +6,14 @@ import java.util.Timer;
 
 public class TimerObject {
 
-    int workMins, breakMins, longBreakMins, breakIntervals;
-    int currMins, currSeconds, breakSeconds, restMins, restSeconds;
+    int workMins, breakMins, longBreakMins, breakIntervals,currInterval;
+    int currMins, currSeconds, breakSeconds, restMins;
     Timer t;
 
+
+
+
+    boolean working = true;
 
 
     public void pause(){
@@ -30,6 +34,7 @@ public class TimerObject {
             currMins = workMins;
             breakSeconds=0;
             restMins = breakMins;
+            currInterval = 1;
 
 
         }
@@ -56,9 +61,29 @@ public class TimerObject {
                 }
 
                 if(currMins == 0 && currSeconds == 0)
-                {
+                {  working =! working;
+
                    currMins = breakMins;
+                   currSeconds = 1;
+
+                    if (working) {
+                        currMins = workMins;
+                        currInterval += 1;
+                        MainApplication.app.AddWorkSecond();
+
+                    }
+
+                    else{
+                        MainApplication.app.AddBreakSecond();
+
+                        if(currInterval % breakIntervals == 0){
+                            currMins = longBreakMins;
+
+                        }
+                    }
+                    MainApplication.app.UpdateSessionText(working,currInterval);
                 }
+
             }
             public void breaks(){
                 if(currMins == 0 && currSeconds==0){
@@ -71,5 +96,19 @@ public class TimerObject {
         };
         t.scheduleAtFixedRate(task,1000,1000);
     }
-}
+
+            public void longbreaks() {
+                breakIntervals = 0;
+
+
+                if(breakIntervals == 4){
+
+
+
+
+                }
+
+    }
+
+            }
 
