@@ -9,17 +9,11 @@ public class TimerObject {
     int workMins, breakMins, longBreakMins, breakIntervals,currInterval;
     int currMins, currSeconds, breakSeconds, restMins;
     Timer t;
-
-
-
-
     boolean working = true;
 
-
-    public void pause(){
+    public void pause()
+    {
         t.cancel();
-
-
     }
 
     public void start(int workMins, int breakMins, int longBreakMins, int breakIntervals, boolean resume)
@@ -35,14 +29,12 @@ public class TimerObject {
             breakSeconds=0;
             restMins = breakMins;
             currInterval = 1;
-
-
         }
 
         t = new Timer();
 
-
-        TimerTask task = new TimerTask() {
+        TimerTask task = new TimerTask()
+        {
             public void run() {
                 if(currSeconds == 0)
                 {
@@ -61,7 +53,8 @@ public class TimerObject {
 
                 currSeconds--;
 
-                if(currSeconds < 10) {
+                if(currSeconds < 10)
+                {
                     MainApplication.app.UpdateTimer(currMins + " : 0" + currSeconds);
                 }
                 else
@@ -72,52 +65,29 @@ public class TimerObject {
                 if(currMins == 0 && currSeconds == 0)
                 {
                     working =! working;
+                    currMins = breakMins;
+                    currSeconds = 1;
 
-                   currMins = breakMins;
-                   currSeconds = 1;
-
-
-                    if (working) {
+                    if (working)
+                    {
                         currMins = workMins;
-                        currInterval = 0;
+                        currInterval ++;
                         MainApplication.app.AddWorkSecond(-1);
                     }
-
-                    else{
+                    else
+                    {
                         MainApplication.app.AddBreakSecond(-1);
-                        if(currInterval % breakIntervals == 0){
+                        if(currInterval % breakIntervals == 0)
+                        {
                             currMins = longBreakMins;
-
                         }
                     }
                     MainApplication.app.UpdateSessionText(working,currInterval);
                 }
 
             }
-            public void breaks(){
-                if(currMins == 0 && currSeconds==0){
-
-
-                }
-
-            }
-
         };
         t.scheduleAtFixedRate(task,1000,1000);
     }
-
-            public void longbreaks() {
-                breakIntervals = 0;
-
-
-                if(breakIntervals == 4){
-
-
-
-
-                }
-
-    }
-
-            }
+}
 
