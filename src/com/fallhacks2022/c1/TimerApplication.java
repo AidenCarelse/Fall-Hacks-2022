@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -286,6 +287,12 @@ public class TimerApplication {
 
     private void RemoveFromToDoList(JCheckBox checkBox, JLabel label) throws InterruptedException
     {
+        for(int i = Arrays.stream(todoPanel.getComponents()).toList().indexOf(label); i<todoPanel.getComponents().length; i++)
+        {
+            Component curr = todoPanel.getComponent(i);
+            curr.setLocation(curr.getX(), curr.getY() - curr.getHeight());
+        }
+
         todoPanel.remove(checkBox);
         todoPanel.remove(label);
 
@@ -327,7 +334,7 @@ public class TimerApplication {
         TimerLabel.setText(time);
     }
 
-    public void UpdateSessionText(boolean working)
+    public void UpdateSessionText(boolean working, int sessionNum)
     {
         if(working)
         {
@@ -337,6 +344,8 @@ public class TimerApplication {
         {
             session.setText("Break Time!");
         }
+
+        session.setText(session.getText() + "(Inteval "+sessionNum+")");
     }
 }
 
