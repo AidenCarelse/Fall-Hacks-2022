@@ -50,6 +50,15 @@ public class TimerObject {
                     currSeconds = 60;
                 }
 
+                if(working)
+                {
+                    MainApplication.app.AddWorkSecond(1);
+                }
+                else
+                {
+                    MainApplication.app.AddBreakSecond(1);
+                }
+
                 currSeconds--;
 
                 if(currSeconds < 10) {
@@ -61,21 +70,21 @@ public class TimerObject {
                 }
 
                 if(currMins == 0 && currSeconds == 0)
-                {  working =! working;
+                {
+                    working =! working;
 
                    currMins = breakMins;
                    currSeconds = 1;
 
+
                     if (working) {
                         currMins = workMins;
-                        currInterval += 1;
-                        MainApplication.app.AddWorkSecond();
-
+                        currInterval = 0;
+                        MainApplication.app.AddWorkSecond(-1);
                     }
 
                     else{
-                        MainApplication.app.AddBreakSecond();
-
+                        MainApplication.app.AddBreakSecond(-1);
                         if(currInterval % breakIntervals == 0){
                             currMins = longBreakMins;
 

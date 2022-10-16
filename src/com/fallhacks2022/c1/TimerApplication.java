@@ -34,7 +34,7 @@ public class TimerApplication {
     public JLabel session;
     private JPanel completedPanel;
 
-    private int totalWorkMins, totalWorkSeconds, totalBreakMins, totalBreakSeconds;
+    private int totalWorkMins = 0, totalWorkSeconds = 0, totalBreakMins = 0, totalBreakSeconds = 0;
 
     public void StartTimerApplication()
     {
@@ -350,9 +350,9 @@ public class TimerApplication {
         session.setText(session.getText() + " (Inteval "+sessionNum+")");
     }
 
-    public void AddWorkSecond()
+    public void AddWorkSecond(int x)
     {
-        totalWorkSeconds++;
+        totalWorkSeconds += x;
 
         if(totalWorkSeconds == 60)
         {
@@ -362,17 +362,23 @@ public class TimerApplication {
 
         if(totalWorkSeconds >= 10)
         {
-            WorkTime.setText(totalWorkMins+":"+totalWorkSeconds);
+            WorkTime.setText("Total Time Worked "+totalWorkMins+":"+totalWorkSeconds);
         }
         else
         {
-            WorkTime.setText(totalWorkMins+":0"+totalWorkSeconds);
+            if(totalWorkSeconds == -1)
+            {
+                WorkTime.setText("Total Time Worked "+totalWorkMins+":00");
+            }
+            else {
+                WorkTime.setText("Total Time Worked " + totalWorkMins + ":0" + totalWorkSeconds);
+            }
         }
     }
 
-    public void AddBreakSecond()
+    public void AddBreakSecond(int x)
     {
-        totalBreakSeconds++;
+        totalBreakSeconds += x;
 
         if(totalBreakSeconds == 60)
         {
@@ -382,11 +388,18 @@ public class TimerApplication {
 
         if(totalBreakSeconds >= 10)
         {
-            BreakTime.setText(totalBreakMins+":"+totalBreakSeconds);
+
+            BreakTime.setText("Total Break Time "+totalBreakMins+":"+totalBreakSeconds);
         }
         else
         {
-            BreakTime.setText(totalBreakMins+":0"+totalBreakSeconds);
+            if(totalBreakSeconds == -1)
+            {
+                BreakTime.setText("Total Break Time "+totalBreakMins+":00");
+            }
+            else {
+                BreakTime.setText("Total Break Time " + totalBreakMins + ":0" + totalBreakSeconds);
+            }
         }
     }
 }
