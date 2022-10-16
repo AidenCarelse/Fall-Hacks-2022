@@ -162,12 +162,17 @@ public class TimerApplication {
 
     private void InitializeTabs()
     {
+        UIManager.put("TabbedPane.selected",new Color (237,92,78));
         tabbedPane = new JTabbedPane();
         PanelMain.add(tabbedPane);
 
         tabbedPane.setBounds(550, 0, 300, 475);
         tabbedPane.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tabbedPane.setBorder(null);
+        tabbedPane.setBackground(new Color(138,50,41));
+        tabbedPane.setForeground(Color.white);
+
+
 
         tabbedPane.addTab("Tasks", InitializeToDoList());
         tabbedPane.addTab("Completed", InitializeCompletedList());
