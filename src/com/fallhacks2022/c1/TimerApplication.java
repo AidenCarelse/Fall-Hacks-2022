@@ -124,7 +124,7 @@ public class TimerApplication {
                     resume = false;
                 }
 
-                timer.start(1, 2, 25, 4, resume);
+                timer.start(1, 1, 25, 3, resume);
             }
         });
         PauseButton.addActionListener(new ActionListener()
