@@ -124,7 +124,7 @@ public class TimerApplication {
                     resume = false;
                 }
 
-                timer.start(1, 1, 25, 3, resume);
+                timer.start(1, 1, 2, 3, resume);
             }
         });
         PauseButton.addActionListener(new ActionListener()
@@ -345,7 +345,7 @@ public class TimerApplication {
             session.setText("Break Time!");
         }
 
-        session.setText(session.getText() + "(Inteval "+sessionNum+")");
+        session.setText(session.getText() + " (Inteval "+sessionNum+")");
     }
 }
 
