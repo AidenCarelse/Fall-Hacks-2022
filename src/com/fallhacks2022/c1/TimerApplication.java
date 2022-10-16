@@ -139,7 +139,7 @@ public class TimerApplication {
 
     private void InitializeTimes()
     {
-        session = new JLabel("Working Time!", SwingConstants.CENTER);
+        session = new JLabel("Working Time! (Interval 1)", SwingConstants.CENTER);
         PanelMain.add(session);
 
         session.setBounds(TimerLabel.getX(), TimerLabel.getY() - 30, TimerLabel.getWidth(), 30);
