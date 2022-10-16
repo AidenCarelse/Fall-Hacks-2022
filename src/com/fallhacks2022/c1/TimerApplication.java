@@ -34,6 +34,8 @@ public class TimerApplication {
     public JLabel session;
     private JPanel completedPanel;
 
+    private int totalWorkMins, totalWorkSeconds, totalBreakMins, totalBreakSeconds;
+
     public void StartTimerApplication()
     {
         PanelMain.setLayout(null);
@@ -346,6 +348,46 @@ public class TimerApplication {
         }
 
         session.setText(session.getText() + " (Inteval "+sessionNum+")");
+    }
+
+    public void AddWorkSecond()
+    {
+        totalWorkSeconds++;
+
+        if(totalWorkSeconds == 60)
+        {
+            totalWorkSeconds = 0;
+            totalWorkMins++;
+        }
+
+        if(totalWorkSeconds >= 10)
+        {
+            WorkTime.setText(totalWorkMins+":"+totalWorkSeconds);
+        }
+        else
+        {
+            WorkTime.setText(totalWorkMins+":0"+totalWorkSeconds);
+        }
+    }
+
+    public void AddBreakSecond()
+    {
+        totalBreakSeconds++;
+
+        if(totalBreakSeconds == 60)
+        {
+            totalBreakSeconds = 0;
+            totalBreakMins++;
+        }
+
+        if(totalBreakSeconds >= 10)
+        {
+            BreakTime.setText(totalBreakMins+":"+totalBreakSeconds);
+        }
+        else
+        {
+            BreakTime.setText(totalBreakMins+":0"+totalBreakSeconds);
+        }
     }
 }
 
