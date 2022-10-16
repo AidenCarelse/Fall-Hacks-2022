@@ -9,15 +9,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Statement;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.text.NumberFormatter;
 
 
-public class TimerApplication {
-
+public class TimerApplication
+{
+    // Initialize variables
     private JLabel TimerLabel;
     public JPanel PanelMain;
     private JButton StartButton;
@@ -34,13 +37,16 @@ public class TimerApplication {
     private TimerObject timer = null;
     public JLabel session;
     private JPanel completedPanel;
-
+    boolean resume = true;
+    private JFormattedTextField workMins, breakMins, longBreakMins, breakIntervals;
     private int totalWorkMins = 0, totalWorkSeconds = 0, totalBreakMins = 0, totalBreakSeconds = 0;
 
+    // Initialize the application
     public void StartTimerApplication()
     {
         PanelMain.setLayout(null);
 
+        // Set the svg wave graphic
         try
         {
             SetWaves();
@@ -50,29 +56,36 @@ public class TimerApplication {
             throw new RuntimeException(e);
         }
 
+        // Set all the components
         SetTitle();
         InitializeLabel();
         InitializeButtons();
         InitializeTimes();
+        InitializeCustomButtons();
         InitializeTabs();
     }
 
+    // Set the svg wave image to the bottom of the frame
     private void SetWaves() throws IOException
     {
+        // Access file
         Image bottomWaves = ImageIO.read(new File("svg_wave_bottom.png")).getScaledInstance(900, 125, Image.SCALE_DEFAULT);
         JLabel picture = new JLabel(new ImageIcon(bottomWaves));
         picture.setBounds(0, 450, 900, 125);
         PanelMain.add(picture);
     }
 
+    // Set the title and subtitle
     private void SetTitle()
     {
+        // Title
         JLabel title = new JLabel("The Pomodoro Technique", SwingConstants.LEFT);
         PanelMain.add(title);
 
         title.setBounds(25, 25, 500, 30);
         title.setFont(new Font("SansSerif", Font.BOLD, 32));
 
+        // Subtitle
         JLabel subtitle = new JLabel("Study Clock & Check List");
         PanelMain.add(subtitle);
         subtitle.setBounds(25, title.getY() + title.getHeight() + 10, 500, 30);
@@ -80,6 +93,7 @@ public class TimerApplication {
         subtitle.setForeground(Color.gray);
     }
 
+    // Set up the timer label
     private void InitializeLabel()
     {
         TimerLabel = new JLabel("25 : 00", SwingConstants.CENTER);
@@ -89,59 +103,70 @@ public class TimerApplication {
         TimerLabel.setFont(new Font("SansSerif", Font.BOLD, 100));
     }
 
+    // Set up start and pause buttons
     private void InitializeButtons()
     {
+        // Create and add to panel
         StartButton = new JButton();
         PauseButton = new JButton();
         PanelMain.add(StartButton);
         PanelMain.add(PauseButton);
 
+        // Set location and size
         StartButton.setBounds(115,TimerLabel.getY() + TimerLabel.getHeight() + 30, 150, 35);
         PauseButton.setBounds(285,TimerLabel.getY() + TimerLabel.getHeight() + 30, 150, 35);
 
+        // Set text and font
         StartButton.setText("START");
         PauseButton.setText("PAUSE");
         StartButton.setFont(new Font("SansSerif", Font.BOLD, 24));
         PauseButton.setFont(new Font("SansSerif", Font.BOLD, 24));
 
+        // Set colours
         StartButton.setForeground(Color.white);
         PauseButton.setForeground(Color.white);
         StartButton.setBackground(new Color(237, 92, 78));
         PauseButton.setBackground(new Color(237, 92, 78));
 
+        // Set border and focus
         StartButton.setFocusPainted(false);
         PauseButton.setFocusPainted(false);
         StartButton.setBorder(null);
         PauseButton.setBorder(null);
 
+        // Start button click listener
         StartButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                boolean resume = true;
-
                 if(timer == null)
                 {
                     timer = new TimerObject();
                     resume = false;
                 }
 
-                timer.start(1, 1, 2, 3, resume);
+                timer.start(Integer.parseInt(workMins.getText()), Integer.parseInt(breakMins.getText()), Integer.parseInt(longBreakMins.getText()), Integer.parseInt(breakIntervals.getText()), resume);
             }
         });
+
+        // Click button click listener
         PauseButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                StartButton.setText("Resume");
+                PauseButton.setText("Restart");
                 timer.pause();
             }
         });
     }
 
+    // Set up the total time counters
     private void InitializeTimes()
     {
+        // Set current session text
         session = new JLabel("Working Time! (Interval 1)", SwingConstants.CENTER);
         PanelMain.add(session);
 
@@ -149,6 +174,7 @@ public class TimerApplication {
         session.setFont(new Font("SansSerif", Font.BOLD, 18));
         session.setForeground(Color.gray);
 
+        // Set total work and break counters
         WorkTime = new JLabel("Total Time Worked 00:00", SwingConstants.CENTER);
         BreakTime = new JLabel("Total Break Time 00:00", SwingConstants.CENTER);
         PanelMain.add(WorkTime);
@@ -161,6 +187,50 @@ public class TimerApplication {
         BreakTime.setForeground(Color.gray);
     }
 
+    // Set up the custom time buttons
+    private void InitializeCustomButtons()
+    {
+        // Format to ints form 1 to 9999
+        NumberFormat format = NumberFormat.getInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMaximum(1);
+        formatter.setMaximum(9999);
+        formatter.setAllowsInvalid(false);
+        formatter.setCommitsOnValidEdit(true);
+
+        // Work time
+        workMins = new JFormattedTextField(formatter);
+        workMins.setBounds(StartButton.getX(), WorkTime.getY() + WorkTime.getHeight() + 10, 50, 25);
+        workMins.setText("25");
+
+        // Break time
+        breakMins = new JFormattedTextField(formatter);
+        breakMins.setBounds(workMins.getX() + workMins.getWidth() + 40, WorkTime.getY() + WorkTime.getHeight() + 10, 50, 25);
+        breakMins.setText("5");
+
+        // Long break time
+        longBreakMins = new JFormattedTextField(formatter);
+        longBreakMins.setBounds(breakMins.getX() + breakMins.getWidth() + 40, WorkTime.getY() + WorkTime.getHeight() + 10, 50, 25);
+        longBreakMins.setText("20");
+
+        // Intervals until long break time
+        breakIntervals = new JFormattedTextField(formatter);
+        breakIntervals.setBounds(longBreakMins.getX() + longBreakMins.getWidth() + 40, WorkTime.getY() + WorkTime.getHeight() + 10, 50, 25);
+        breakIntervals.setText("4");
+
+        // Labels
+        JLabel titles = new JLabel("Work Mins          Break Mins        Ext. Break           Intervals Until Extended");
+        titles.setBounds(workMins.getX(), breakMins.getY() + breakIntervals.getHeight(), 600, 20);
+
+        PanelMain.add(workMins);
+        PanelMain.add(breakMins);
+        PanelMain.add(longBreakMins);
+        PanelMain.add(breakIntervals);
+        PanelMain.add(titles);
+    }
+
+    // Set up the tab page
     private void InitializeTabs()
     {
         UIManager.put("TabbedPane.selected",new Color (237,92,78));
@@ -173,19 +243,20 @@ public class TimerApplication {
         tabbedPane.setBackground(new Color(138,50,41));
         tabbedPane.setForeground(Color.white);
 
-
-
+        // Add tabs
         tabbedPane.addTab("Tasks", InitializeToDoList());
         tabbedPane.addTab("Completed", InitializeCompletedList());
         tabbedPane.add("+", InitializeAddList());
     }
 
+    // Set up the to do tab
     private JPanel InitializeToDoList()
     {
         todoPanel = new JPanel(null);
 
         todoPanel.setBackground(Color.white);
 
+        // No tasks text
         emptyTasks = new JLabel("<html>You don't have any tasks, click + to create<br/>one!</html>");
         emptyTasks.setFont(new Font("SansSerif", Font.ITALIC, 14));
         emptyTasks.setForeground(Color.gray);
@@ -195,11 +266,13 @@ public class TimerApplication {
         return todoPanel;
     }
 
+    // Set up the completed tab
     private JPanel InitializeCompletedList()
     {
         completedPanel = new JPanel(null);
         completedPanel.setBackground(Color.white);
 
+        // No completed text
         emptyCompleted = new JLabel("<html>You haven't completed any tasks yet!</html>");
         emptyCompleted .setFont(new Font("SansSerif", Font.ITALIC, 14));
         emptyCompleted .setForeground(Color.gray);
@@ -211,16 +284,19 @@ public class TimerApplication {
         return completedPanel;
     }
 
+    // Set up the add task tab
     private JPanel InitializeAddList()
     {
         JPanel addPanel = new JPanel(null);
         addPanel.setBackground(Color.white);
         addPanel.setBorder(null);
 
+        // Text field
         field = new JTextField ();
         field.setBounds(10, 10, 250, 25);
         field.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
+        // Add button
         JButton add = new JButton();
         add.setBounds(10, field.getY() + field.getHeight() + 5, 100, 20);
         add.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -229,6 +305,7 @@ public class TimerApplication {
         add.setForeground(Color.white);
         add.setBackground(new Color(237, 92, 78));
 
+        // Add button listener
         add.addActionListener(new ActionListener()
         {
             @Override
@@ -245,11 +322,13 @@ public class TimerApplication {
         return addPanel;
     }
 
+    // Add to the to do list
     private void AddToToDoList(String task)
     {
         tasks.add(task);
         int y = 10;
 
+        // Get the y value
         if(tasks.size() == 1)
         {
             todoPanel.remove(emptyTasks);
@@ -260,16 +339,19 @@ public class TimerApplication {
             y = last.getY() + last.getHeight();
         }
 
+        // Checkbox
         JCheckBox check = new JCheckBox();
         check.setBounds(10, y, 20, 30);
         check.setBackground(Color.white);
         check.setForeground(Color.white);
 
+        // Task name
         JLabel label = new JLabel(task);
         label.setFont(new Font("SansSerif", Font.PLAIN, 14));
         label.setForeground(Color.gray);
         label.setBounds(35, y, 290, 30);
 
+        // Check box listener
         check.addActionListener(new ActionListener()
         {
             @Override
@@ -293,8 +375,10 @@ public class TimerApplication {
         field.setText("");
     }
 
+    // Remove from to do list
     private void RemoveFromToDoList(JCheckBox checkBox, JLabel label) throws InterruptedException
     {
+        // Change y values
         for(int i = Arrays.stream(todoPanel.getComponents()).toList().indexOf(label); i<todoPanel.getComponents().length; i++)
         {
             Component curr = todoPanel.getComponent(i);
@@ -324,6 +408,7 @@ public class TimerApplication {
             y = last.getY() + last.getHeight();
         }
 
+        // Update label
         label.setFont(new Font("SansSerif", Font.ITALIC, 14));
         label.setText("<html><strike>"+label.getText()+"</strike><html>");
         label.setBounds(10, y, 290, 30);
@@ -337,11 +422,13 @@ public class TimerApplication {
 
     }
 
+    // Update the timer text
     public void UpdateTimer(String time)
     {
         TimerLabel.setText(time);
     }
 
+    // Update the session text
     public void UpdateSessionText(boolean working, int sessionNum)
     {
         if(working)
@@ -356,6 +443,7 @@ public class TimerApplication {
         session.setText(session.getText() + " (Inteval "+sessionNum+")");
     }
 
+    // Update total work time
     public void AddWorkSecond(int x)
     {
         totalWorkSeconds += x;
@@ -382,6 +470,7 @@ public class TimerApplication {
         }
     }
 
+    // Update total break time
     public void AddBreakSecond(int x)
     {
         totalBreakSeconds += x;
