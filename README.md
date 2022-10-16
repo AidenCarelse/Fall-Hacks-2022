@@ -10,4 +10,4 @@ This app is useful for students seeking productivity and those who find it hard 
 
 We used Java Swing on IntelliJ (JDK 18.0.1). You can clone this repository to your machine and run it by simply choosing the main file in MainApplication on startup.
 
-This was both of our first hackatahon, and w ehad a blast, thank you SFU!
+This was both of our first hackatahon, and we had a blast, thank you SFU!
